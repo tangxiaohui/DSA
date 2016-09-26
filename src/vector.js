@@ -1,7 +1,7 @@
-import { rand } from '../util';
-import Fib from '../fib';
+import { rand } from './util';
+import Fib from './fib';
 
-class Vector {
+export default class Vector {
   constructor() {
     this._elems = [];
   }
@@ -35,11 +35,28 @@ class Vector {
   }
 
   max(lo, hi) {
-
+    var max = lo;
+    for (var i = lo; i < hi; i++) {
+      if (this.elems[max] < this.elems[i]) {
+        max = i;
+      }
+    }
+    return max;
   }
 
   selectionSort(lo, hi) {
+    for (var i = hi - 1; 1 < i; i--) {
+      var max = this.max(lo, i);
+      this.swap(max, i);
+    }
+  }
 
+  insertionSort(lo, hi) {
+    for (var i = lo + 1; i < hi; i++) {
+      var e = this.elems[i];
+      var p = this._search(e, lo, i);
+      this.insert(p, e);
+    }
   }
 
   merge(lo, mi, hi) {
@@ -48,14 +65,13 @@ class Vector {
     var tempA = this._elems.slice(lo, mi);
     var tempB = this._elems.slice(mi, hi);
     for (var i = 0, j = 0, k = 0; (j < la) || (k < lb);) {
-      if ((j < la) && (!(k < lb) || tempA[j] <= tempB[k])) {
-        A[i++] = tempA[j++];
+      if ((j < la) && (!(k < lb) || (tempA[j] <= tempB[k]))) {
+        this.elems[i++] = tempA[j++];
       }
-      if ((k < lb) && (!(j < la) || (tempB[k] < tempA[j])) {
-        A[i++] = tempB[k++];
+      if ((k < lb) && (!(j < la) || (tempB[k] < tempA[j]))) {
+        this.elems[i++] = tempB[k++];
       }
     }
-
   }
 
   mergeSort(lo, hi) {
@@ -101,29 +117,30 @@ class Vector {
 
   // 无序查找
   find(e) {
-    return findInArea(e, 0, this.size());
+    return this._find(e, 0, this.size());
   }
 
-  findInArea(e, lo, hi) {
+  _find(e, lo, hi) {
     while ((lo < hi--) && (e !== this._elems[hi])); // 从后向前查找
     return hi;  // 失败返回 lo - 1
   }
 
   // 有序查找
   search(e) {
-    return 0 < this.size() ? this.searchInArea(e, 0, this.size()) : -1; 
+    return 0 < this.size() ? this._search(e, 0, this.size()) : -1; 
   }
 
-  searchInArea(e, lo, hi) {
-    return (rand() % 2) ? binSearch(e, lo, hi) : fibSearch(e, lo, hi);
+  _search(e, lo, hi) {
+    return (rand() % 2) ? this.binSearch(e, lo, hi) : this.fibSearch(e, lo, hi);
   }
 
+  // 不大于e 的最大秩
   binSearch(e, lo, hi) {
     while (lo < hi) {
       var mi = (lo + hi) >> 1;
       (e < this._elems[mi]) ? hi = mi : lo = mi + 1;
     }
-    return --lo;
+    return  lo;  // 返回不大于 e 的最大秩，退化情况为 -1
   }
 
   fibSearch(e, lo, hi) {
@@ -178,10 +195,10 @@ class Vector {
   }
 
   sort() {
-    return this.sort(0, this.size());
+    return this._sort(0, this.size());
   }
 
-  sortInArea(lo, hi) {
+  _sort(lo, hi) {
     switch (rand() % 5) {
       case 1: bubbleSort(lo, hi);
         break;
@@ -197,10 +214,10 @@ class Vector {
   }
 
   unsort() {
-    this.unsortInArea(0, this.size());
+    this._unsort(0, this.size());
   }
 
-  unsortInArea(lo, hi) {
+  _unsort(lo, hi) {
     for (var i = hi; i > 0; i--) {
       swap(i - 1, Math.random() % i);
     }
@@ -210,7 +227,7 @@ class Vector {
     var oldSize = this.size();
     var i = 1;
     while (i < this.size()) {
-      (this.findInArea(this._elems[i], 0, i) < 0) ?
+      (this._find(this._elems[i], 0, i) < 0) ?
       i++: remove(i);
     }
     return oldSize - this.size();
