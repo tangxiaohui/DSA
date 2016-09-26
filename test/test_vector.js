@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var Vector = require('../src/vector');;
+var Vector = require('../src/vector');
 
 describe('Vector', function () {
   describe('getter', function () {
