@@ -1,5 +1,5 @@
-var expect = require('chai').expect;
-var Vector = require('../src/vector');
+import { expect } from 'chai';
+import Vector from '../src/vector';
 
 describe('Vector', function () {
   describe('getter', function () {
