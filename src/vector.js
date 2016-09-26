@@ -1,5 +1,4 @@
 import { rand } from './util';
-import Fib from './fib';
 
 export default class Vector {
   constructor(array) {
