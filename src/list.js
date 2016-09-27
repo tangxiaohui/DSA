@@ -18,18 +18,37 @@ class ListNode {
     var x = new ListNode(e, this, this.succ);
     this.succ.pred = x;
     this.succ = x;
+    return x;
   }
 };
 
 export default class List {
-  constructor() {
-    init();
+  constructor(L) {
+    this.init();
+    if (L instanceof Array) {
+      this.copy(L);
+    }
+  }
+
+  copy(array) {
+    this.clear();
+    for (var i = 0; i < array.length; i++) {
+      this.insertAsLast(array[i]);
+    }
+  }
+
+  toArray() {
+    var a = [];
+    this.traverse(function (x) {
+      a.push(x);
+    });
+    return a;
   }
 
   init() {
     this.header = new ListNode(0, null, null);
     this.trailer = new ListNode(0, null, null);
-    this.header.succ = trailer;
+    this.header.succ = this.trailer;
     this.header.pred = null;
     this.trailer.pred = this.header;
     this.trailer.succ = null;
@@ -39,23 +58,43 @@ export default class List {
   clear() {
     var oldSize = this._size;
     while (0 < this._size) {
-      this.remove(header.succ);
+      this.remove(this.header.succ);
     }
     return oldSize;
   }
 
+  _merge(p, n, q, m) {
+    var first = p; // 记录第一个节点
+    while (0 < m) {
+      if ((0 < n) && (p.data <= q.data)) {
+        if (q == (p = p.succ)) {
+          break;
+        }
+        n--;
+      } else {
+        q = q.succ;
+        var newInsert = this.insertB(p, this.remove(q.pred));
+        if (p === first) {
+          first = newInsert;
+        }
+        m--;
+      }
+    }
+    return first; // 返回二路归并之后的第一个节点
+  }
+
   mergeSort(p, n) {
     if (n < 2) {
-      return;
+      return p; // 平凡情况，返回当前结点
     }
     var m = n >> 1;
     var q = p;
     for (var i = 0; i < m; i++) {
       q = q.succ;
     }
-    this.mergeSort(p, m);
-    this.mergeSort(q, n - m);
-    this._merge(p, m, this, q, n - m);
+    p = this.mergeSort(p, m);
+    q = this.mergeSort(q, n - m);
+    return this._merge(p, m, q, n - m);
   }
 
   // 在任何时刻，S[r, n)已经有序，且不小于前缀 S[0, r)
@@ -90,7 +129,7 @@ export default class List {
   }
 
   get(r) {
-    var p = first();
+    var p = this.first();
     while (0 < r--) {
       p = p.succ;
     }
@@ -141,7 +180,7 @@ export default class List {
 
   // 在有序列表内节点 p 的 n 个真前驱中，找到不大于e的最后者
   _search(e, n, p) {
-    while (0 < n--) {
+    while (0 <= n--) { // 可能返回 header
       if ((p = p.pred).data <= e) {
         break;
       }
@@ -160,7 +199,7 @@ export default class List {
   }
 
   selectMax() {
-    return this._selectMax(header.succ, this._size);
+    return this._selectMax(this.header.succ, this._size);
   }
 
   insertAsFirst(e) {
@@ -193,25 +232,6 @@ export default class List {
     return e;
   }
 
-  
-  _merge(p, n, L, q, m) {
-    while (0 < m) {
-      if ((0 < n) && (p.data <= q.data)) {
-        if (q == (p = p.succ)) {
-          break;
-        }
-        n--;
-      } else {
-        this.insertB(p, L.remove((q = q.succ).pred));
-        m--;
-      }
-    }
-  }
-
-  merge(L) {
-    return this._merge(first(), this._size, L, L.first(), L._size);
-  }
-
   _sort(p, n) {
     switch (rand % 3) {
       case 1: insertionSort(p, n); break;
@@ -221,7 +241,7 @@ export default class List {
   }
 
   sort() {
-    this._sort(first(), this._size());
+    this._sort(this.first(), this._size());
   }
 
   deduplicate() {
@@ -233,7 +253,7 @@ export default class List {
     var r = 0;
     while (this.trailer !== (p = p.succ)) {
       var q = this._find(p.data, r, p);
-      q ? remove(q) : r++;
+      q ? this.remove(q) : r++;
     }
     return oldSize - this._size;
   }
@@ -249,7 +269,7 @@ export default class List {
       if (q.data !== p.data) {
         p = q;
       } else {
-        remove(q);
+        this.remove(q);
       }
     }
     return oldSize - this._size;
@@ -284,9 +304,11 @@ export default class List {
     this.trailer = temp;
   }
 
-  traverse(visit) {
-    for (var p = this.header.succ; p !== this.trailer; p = p.succ) {
-      visit(p.data);
-    }
+  traverse(visit, p) {
+    var cur = p || this.first();
+    while (cur !== this.trailer) {
+      visit(cur.data);
+      cur = cur.succ;
+    } 
   }
 };
