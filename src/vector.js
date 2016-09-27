@@ -165,7 +165,6 @@ export default class Vector {
       this._elems[i] = this._elems[i - 1];
     }
     this._elems[r] = e;
-    console.log(this._elems);
     return r;
   }
 
