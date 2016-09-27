@@ -4,7 +4,7 @@
   "description": "Implement data structures and algorithms by Javascript",
   "main": "index.js",
   "scripts": {
-    "test": "mocha  --compilers js:babel-core/register"
+    "test": "mocha  --compilers js:babel-core/register test/test_stack.js"
   },
   "repository": {
     "type": "git",

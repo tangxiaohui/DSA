@@ -1,7 +1,7 @@
 import { rand } from './util';
 
 export default class Vector {
-  constructor(array) {
+  constructor(array = []) {
     this._elems = Array.from(array);
   }
 
