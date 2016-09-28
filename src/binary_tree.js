@@ -1,4 +1,5 @@
 import Queue from './queue';
+import Stack from './stack';
 
 const RB_RED = 0;
 const RB_BALCK = 1;
@@ -70,41 +71,111 @@ class BinNode {
   }
 
   travPre(visit) {
-    this.travPreRecursive(this, visit);
+    BinNode.travPreRecursive(this, visit);
   }
 
-  travPreRecursive(x, visit) {
+  static travPreRecursive(x, visit) {
     if (!x) {
       return;
     }
     visit(x.data);
-    this.travPreRecursive(x.lc, visit);
-    this.travPreRecursive(x.rc, visit);
+    BinNode.travPreRecursive(x.lc, visit);
+    BinNode.travPreRecursive(x.rc, visit);
+  }
+
+  static visitAloneLeftBranch(x, visit, S) {
+    while (x) {
+      visit(x.data);
+      if (x.rc) {
+        S.push(x.rc);
+      }
+      x = x.lc;
+    }
+  }
+
+  static travPreIterative(x, visit) {
+    const S = new Stack();
+    while (true) {
+      BinNode.visitAloneLeftBranch(x, visit, S);
+      if (S.empty()) {
+        break;
+      }
+      x = S.pop();
+    }
   }
 
   travIn(visit) {
-    this.travInRecusive(this, visit);
+    BinNode.travInRecusive(this, visit);
   }
 
-  travInRecusive(x, visit) {
+  static travInRecusive(x, visit) {
     if (!x) {
       return;
     }
-    this.travInRecusive(x.lc, visit);
+    BinNode.travInRecusive(x.lc, visit);
     visit(x.data);
-    this.travInRecusive(x.rc, visit);
+    BinNode.travInRecusive(x.rc, visit);
+  }
+
+  static goAloneLeftBranch(x, S) {
+    while (x) {
+      S.push(x);
+      x = x.lc;
+    }
+  }
+
+  static travInIterative(x, visit) {
+    const S = new Stack();
+    while (true) {
+      BinNode.goAloneLeftBranch(x, S);
+      if (S.empty()) {
+        break;
+      }
+      x = S.pop();
+      visit(x.data);
+      x = x.rc;
+    }
   }
 
   travPost(visit) {
-    this.travPostRecusive(this, visit);
+    BinNode.travPostRecusive(this, visit);
   }
 
-  travPostRecusive(x, visit) {
+  // 在 S 栈顶节点为根的子树中， 找到最高左侧可见叶节点
+  static goHLVFL(S) {
+    let x = S.top();
+    while (x) {
+      if (BinNode.hasLChild(x)) {
+        if (BinNode.hasRChild(x)) {
+          S.push(x.rc);
+        }
+        S.push(x.lc);
+      } else {
+        S.push(x.lc);
+      }
+      x = S.top();
+    }
+    S.pop(); // 退出最后的空节点
+  }
+
+  static travPostIterative(x, visit) {
+    const S = new Stack();
+    S.push(x);
+    while (!S.empty()) {
+      if (x.parent !== S.top()) {
+        BinNode.goHLVFL(S);
+      }
+      x = S.pop();
+      visit(x.data);
+    }
+  }
+
+  static travPostRecusive(x, visit) {
     if (!x) {
       return;
     }
-    this.travPostRecusive(x.lc, visit);
-    this.travPostRecusive(x.rc, visit);
+    BinNode.travPostRecusive(x.lc, visit);
+    BinNode.travPostRecusive(x.rc, visit);
     visit(x.data);
   }
 

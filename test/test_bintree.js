@@ -102,7 +102,7 @@ describe('Binary Tree', () => {
   });
 
   describe('preorder traverse', () => {
-    it('should traverse the three by preorder', () => {
+    it('recusive traverse implement', () => {
       const tree = new BinTree();
       const root = tree.insertAsRoot('A');
       const expr = 'ABCDEFG'.split('');
@@ -116,10 +116,25 @@ describe('Binary Tree', () => {
       tree.travPre(x => output.push(x));
       expect(output).to.eql(['A', 'B', 'D', 'E', 'C', 'F', 'G']);
     });
+
+    it('iterative traverse implement', () => {
+      const tree = new BinTree();
+      const root = tree.insertAsRoot('A');
+      const expr = 'ABCDEFG'.split('');
+      const q = new Queue([root]);
+      for (let i = 1; i < expr.length; i += 2) {
+        const node = q.dequeue();
+        q.enqueue(tree.insertAsLC(node, expr[i]));
+        q.enqueue(tree.insertAsRC(node, expr[i + 1]));
+      }
+      const output = [];
+      BinNode.travPreIterative(root, x => output.push(x));
+      expect(output).to.eql(['A', 'B', 'D', 'E', 'C', 'F', 'G']);
+    });
   });
 
   describe('inorder traverse', () => {
-    it('should traverse the tree by inorder', () => {
+    it('recusive traverse implement', () => {
       const tree = new BinTree();
       const root = tree.insertAsRoot('A');
       const expr = 'ABCDEFG'.split('');
@@ -133,10 +148,25 @@ describe('Binary Tree', () => {
       tree.travIn(x => output.push(x));
       expect(output).to.eql(['D', 'B', 'E', 'A', 'F', 'C', 'G']);
     });
+
+    it('iterative traverse implement', () => {
+      const tree = new BinTree();
+      const root = tree.insertAsRoot('A');
+      const expr = 'ABCDEFG'.split('');
+      const q = new Queue([root]);
+      for (let i = 1; i < expr.length; i += 2) {
+        const node = q.dequeue();
+        q.enqueue(tree.insertAsLC(node, expr[i]));
+        q.enqueue(tree.insertAsRC(node, expr[i + 1]));
+      }
+      const output = [];
+      BinNode.travInIterative(root, x => output.push(x));
+      expect(output).to.eql(['D', 'B', 'E', 'A', 'F', 'C', 'G']);
+    });
   });
 
   describe('postorder traverse', () => {
-    it('should traverse the tree by postorder', () => {
+    it('recusive traverse implement', () => {
       const tree = new BinTree();
       const root = tree.insertAsRoot('A');
       const expr = 'ABCDEFG'.split('');
@@ -148,6 +178,21 @@ describe('Binary Tree', () => {
       }
       const output = [];
       tree.travPost(x => output.push(x));
+      expect(output).to.eql(['D', 'E', 'B', 'F', 'G', 'C', 'A']);
+    });
+
+    it('iterative traverse implement', () => {
+      const tree = new BinTree();
+      const root = tree.insertAsRoot('A');
+      const expr = 'ABCDEFG'.split('');
+      const q = new Queue([root]);
+      for (let i = 1; i < expr.length; i += 2) {
+        const node = q.dequeue();
+        q.enqueue(tree.insertAsLC(node, expr[i]));
+        q.enqueue(tree.insertAsRC(node, expr[i + 1]));
+      }
+      const output = [];
+      BinNode.travPostIterative(root, x => output.push(x));
       expect(output).to.eql(['D', 'E', 'B', 'F', 'G', 'C', 'A']);
     });
   });
