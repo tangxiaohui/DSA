@@ -11,7 +11,7 @@ export default class Queue extends List {
   }
 
   dequeue() {
-    this.remove(this.first());
+    return this.remove(this.first());
   }
 
   front() {

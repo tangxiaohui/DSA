@@ -13,7 +13,8 @@ describe('Queue', () => {
   describe('dequeue', () => {
     it('should remove a element at first', () => {
       const q = new Queue([1, 2, 3]);
-      q.dequeue();
+      const front = q.dequeue();
+      expect(front).to.equal(1);
       expect(q.toArray()).to.eql([2, 3]);
     });
   });
