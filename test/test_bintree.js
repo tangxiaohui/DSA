@@ -102,7 +102,7 @@ describe('Binary Tree', () => {
   });
 
   describe('preorder traverse', () => {
-    it('recusive traverse implement', () => {
+   it('recusive traverse implement', () => {
       const tree = new BinTree();
       const root = tree.insertAsRoot('A');
       const expr = 'ABCDEFG'.split('');
