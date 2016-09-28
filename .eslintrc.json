@@ -21,6 +21,8 @@
         "valid-typeof": "warn",
         "no-useless-constructor": "off",
         "no-param-reassign": "off",
+        "no-plusplus": "off",
+        "no-unused-expressions": "off",
         "linebreak-style": ["error", "windows"]
     },
      "extends": "airbnb-base"
