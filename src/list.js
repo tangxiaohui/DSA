@@ -23,7 +23,7 @@ class ListNode {
 };
 
 export default class List {
-  constructor(L) {
+  constructor(L = []) {
     this.init();
     if (L instanceof Array) {
       this.copy(L);
