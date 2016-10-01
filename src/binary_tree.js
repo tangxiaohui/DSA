@@ -1,8 +1,6 @@
 import Queue from './queue';
-<<<<<<< HEAD
 import Stack from './stack';
-=======
->>>>>>> 13136ab3019b9e46d99210011c673e0df8540844
+
 
 const RB_RED = 0;
 const RB_BALCK = 1;
@@ -74,22 +72,14 @@ class BinNode {
   }
 
   travPre(visit) {
-<<<<<<< HEAD
     BinNode.travPreRecursive(this, visit);
   }
 
   static travPreRecursive(x, visit) {
-=======
-    this.travPreRecursive(this, visit);
-  }
-
-  travPreRecursive(x, visit) {
->>>>>>> 13136ab3019b9e46d99210011c673e0df8540844
     if (!x) {
       return;
     }
     visit(x.data);
-<<<<<<< HEAD
     BinNode.travPreRecursive(x.lc, visit);
     BinNode.travPreRecursive(x.rc, visit);
   }
@@ -187,35 +177,6 @@ class BinNode {
     }
     BinNode.travPostRecusive(x.lc, visit);
     BinNode.travPostRecusive(x.rc, visit);
-=======
-    this.travPreRecursive(x.lc, visit);
-    this.travPreRecursive(x.rc, visit);
-  }
-
-  travIn(visit) {
-    this.travInRecusive(this, visit);
-  }
-
-  travInRecusive(x, visit) {
-    if (!x) {
-      return;
-    }
-    this.travInRecusive(x.lc, visit);
-    visit(x.data);
-    this.travInRecusive(x.rc, visit);
-  }
-
-  travPost(visit) {
-    this.travPostRecusive(this, visit);
-  }
-
-  travPostRecusive(x, visit) {
-    if (!x) {
-      return;
-    }
-    this.travPostRecusive(x.lc, visit);
-    this.travPostRecusive(x.rc, visit);
->>>>>>> 13136ab3019b9e46d99210011c673e0df8540844
     visit(x.data);
   }
 
