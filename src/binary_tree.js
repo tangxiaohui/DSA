@@ -43,12 +43,12 @@ class BinNode {
   succ() {
     let s = this;
     if (this.rc) {
-      s = rc;  // 若有右孩子，则直接后继西在右子树中
+      s = s.rc;  // 若有右孩子，则直接后继必在右子树中
       while (BinNode.hasLChild(s)) {
         s = s.lc;  // 最靠左的节点
       }
     } else {  // 否则，直接后继应是 “将当前节点包含于其左子树的最低祖先”
-      while (BinNode.hasRChild(s)) {
+      while (BinNode.isRChild(s)) {
         s = s.parent;  // 逆向地沿右向分支，不断朝左上方移动
       }
       s = s.parent;  // 最后再朝右上方移动一步， 即抵达直接后继
@@ -319,11 +319,11 @@ class BinTree {
   removeFromParent(x) {
     if (BinNode.isLChild(x)) {
       x.parent.lc = null;
-    }
-    if (BinNode.isRChild(x)) {
+    } else if (BinNode.isRChild(x)) {
       x.parent.rc = null;
+    } else {
+      this.root = null;
     }
-    this.root = null;
   }
 
   removeAt(x) {
