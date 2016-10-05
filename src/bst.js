@@ -223,7 +223,4 @@ class AVL extends BST {
 }
 
 
-export {
-BST,
-AVL,
-};
+export default BST;
