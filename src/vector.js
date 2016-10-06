@@ -228,6 +228,10 @@ export default class Vector {
       visit(this.elems[i]);
     }
   }
+
+  raw() {
+    return this.elems.slice();
+  }
 }
 
 module.exports = Vector;
