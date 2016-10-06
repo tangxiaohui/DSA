@@ -81,7 +81,7 @@ describe('Vector', () => {
 
   describe('search', () => {
     it('should return -1 not found and small than a[0]', () => {
-      const vector = new Vector([9, 10,12]);
+      const vector = new Vector([9, 10, 12]);
       expect(vector.search(8)).to.equal(-1);
     });
 
