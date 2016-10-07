@@ -1,6 +1,9 @@
 import BST from './bst';
 import { BinNode, BinTree } from './binary_tree';
 
+const attachAsLChild = BinNode.attachAsLChild;
+const attachAsRChild = BinNode.attachAsRChild;
+
 class Splay extends BST {
   search(e) {
     const p = this.searchIn(this.root, e);
@@ -66,20 +69,6 @@ class Splay extends BST {
     return true;
   }
 
-  static attachAsLChild(p, lc) {
-    p.lc = lc;
-    if (lc) {
-      lc.parent = p;
-    }
-  }
-
-  static attachAsRChild(p, rc) {
-    p.rc = rc;
-    if (rc) {
-      rc.parent = p;
-    }
-  }
-
   static splay(v) {
     if (!v) {
       return null;
@@ -91,31 +80,31 @@ class Splay extends BST {
       const gg = g.parent;
       if (BinNode.isLChild(v)) {
         if (BinNode.isLChild(p)) {
-          Splay.attachAsLChild(g, p.rc);
-          Splay.attachAsLChild(p, v.rc);
-          Splay.attachAsRChild(p, g);
-          Splay.attachAsRChild(v, p);
+          attachAsLChild(g, p.rc);
+          attachAsLChild(p, v.rc);
+          attachAsRChild(p, g);
+          attachAsRChild(v, p);
         } else {
-          Splay.attachAsLChild(p, v.rc);
-          Splay.attachAsRChild(g, v.lc);
-          Splay.attachAsLChild(v, g);
-          Splay.attachAsRChild(v, p);
+          attachAsLChild(p, v.rc);
+          attachAsRChild(g, v.lc);
+          attachAsLChild(v, g);
+          attachAsRChild(v, p);
         }
       } else if (BinNode.isRChild(p)) {
-        Splay.attachAsRChild(g, p.lc);
-        Splay.attachAsRChild(p, v.lc);
-        Splay.attachAsLChild(p, g);
-        Splay.attachAsLChild(v, p);
+        attachAsRChild(g, p.lc);
+        attachAsRChild(p, v.lc);
+        attachAsLChild(p, g);
+        attachAsLChild(v, p);
       } else {
-        Splay.attachAsRChild(p, v.lc);
-        Splay.attachAsLChild(g, v.rc);
-        Splay.attachAsRChild(v, g);
-        Splay.attachAsLChild(v, p);
+        attachAsRChild(p, v.lc);
+        attachAsLChild(g, v.rc);
+        attachAsRChild(v, g);
+        attachAsLChild(v, p);
       }
       if (!gg) {
         v.parent = null;
       } else {
-        (g === g.lc) ? Splay.attachAsLChild(gg, v) : Splay.attachAsRChild(gg, v);
+        (g === g.lc) ? attachAsLChild(gg, v) : attachAsRChild(gg, v);
       }
       BinTree.updateHeight(g);
       BinTree.updateHeight(p);
@@ -126,11 +115,11 @@ class Splay extends BST {
     p = v.parent;
     if (p) {
       if (BinNode.isLChild(v)) {
-        Splay.attachAsLChild(p, v.rc);
-        Splay.attachAsRChild(v, p);
+        attachAsLChild(p, v.rc);
+        attachAsRChild(v, p);
       } else {
-        Splay.attachAsRChild(p, v.lc);
-        Splay.attachAsLChild(v, p);
+        attachAsRChild(p, v.lc);
+        attachAsLChild(v, p);
       }
       BinTree.updateHeight(p);
       BinTree.updateHeight(v);

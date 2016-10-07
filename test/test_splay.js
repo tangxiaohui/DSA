@@ -2,6 +2,9 @@ import Splay from '../src/splay_tree';
 import { BinNode } from '../src/binary_tree';
 import { expect } from 'chai';
 
+const attachAsLChild = BinNode.attachAsLChild;
+const attachAsRChild = BinNode.attachAsRChild;
+
 describe('Splay Tree', () => {
   describe('search', () => {
     it('should shift the element to the root when found', () => {
@@ -126,7 +129,7 @@ describe('Splay Tree', () => {
     it('should attach b as left child of a', () => {
       const a = new BinNode(1);
       const b = new BinNode(2);
-      Splay.attachAsLChild(a, b);
+      attachAsLChild(a, b);
       expect(a.lc).to.eql(b);
       expect(b.parent).to.eql(a);
     });
@@ -136,7 +139,7 @@ describe('Splay Tree', () => {
     it('should attach b as right child of a', () => {      
       const a = new BinNode(1);
       const b = new BinNode(2);
-      Splay.attachAsRChild(a, b);
+      attachAsRChild(a, b);
       expect(a.rc).to.eql(b);
       expect(b.parent).to.eql(a);
     });
@@ -148,8 +151,8 @@ describe('Splay Tree', () => {
       const g = new BinNode('g');
       const p = new BinNode('p');
       const v = new BinNode('v');
-      Splay.attachAsLChild(g, p);
-      Splay.attachAsLChild(p, v);
+      attachAsLChild(g, p);
+      attachAsLChild(p, v);
       expect(Splay.splay(v).data).to.equal('v');
       expect(v.rc.data).to.equal('p');
       expect(p.rc.data).to.equal('g');
@@ -160,8 +163,8 @@ describe('Splay Tree', () => {
       const g = new BinNode('g');
       const p = new BinNode('p');
       const v = new BinNode('v');
-      Splay.attachAsRChild(g, p);
-      Splay.attachAsRChild(p, v);
+      attachAsRChild(g, p);
+      attachAsRChild(p, v);
       expect(Splay.splay(v).data).to.equal('v');
       expect(v.lc.data).to.equal('p');
       expect(p.lc.data).to.equal('g');
@@ -172,8 +175,8 @@ describe('Splay Tree', () => {
       const g = new BinNode('g');
       const p = new BinNode('p');
       const v = new BinNode('v');
-      Splay.attachAsRChild(g, p);
-      Splay.attachAsLChild(p, v);
+      attachAsRChild(g, p);
+      attachAsLChild(p, v);
       expect(Splay.splay(v).data).to.equal('v');
       expect(v.lc.data).to.equal('g');
       expect(v.rc.data).to.equal('p');
@@ -184,8 +187,8 @@ describe('Splay Tree', () => {
       const g = new BinNode('g');
       const p = new BinNode('p');
       const v = new BinNode('v');
-      Splay.attachAsLChild(g, p);
-      Splay.attachAsRChild(p, v);
+      attachAsLChild(g, p);
+      attachAsRChild(p, v);
       expect(Splay.splay(v).data).to.equal('v');
       expect(v.rc.data).to.equal('g');
       expect(v.lc.data).to.equal('p');
@@ -194,7 +197,7 @@ describe('Splay Tree', () => {
     it('should shift v to top when p.lc == v', () => {
       const p = new BinNode('p');
       const v = new BinNode('v');
-      Splay.attachAsLChild(p, v);
+      attachAsLChild(p, v);
       expect(Splay.splay(v).data).to.equal('v');
       expect(v.rc.data).to.equal('p');
     });
@@ -202,7 +205,7 @@ describe('Splay Tree', () => {
     it('should shift v to top when p.rc == v', () => {
       const p = new BinNode('p');
       const v = new BinNode('v');
-      Splay.attachAsRChild(p, v);
+      attachAsRChild(p, v);
       expect(Splay.splay(v).data).to.equal('v');
       expect(v.lc.data).to.eql('p');
     });

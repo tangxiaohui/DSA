@@ -239,6 +239,20 @@ class BinNode {
   static stature(p) {
     return p ? p.height : -1;
   }
+
+  static attachAsLChild(p, lc) {
+    p.lc = lc;
+    if (lc) {
+      lc.parent = p;
+    }
+  }
+
+  static attachAsRChild(p, rc) {
+    p.rc = rc;
+    if (rc) {
+      rc.parent = p;
+    }
+  }
 }
 
 class BinTree {
@@ -390,4 +404,6 @@ class BinTree {
 export {
   BinNode,
   BinTree,
+  RB_BALCK,
+  RB_RED,
 };
