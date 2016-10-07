@@ -70,6 +70,7 @@ describe('BST', () => {
       const root = tree.insertAsRoot(0);
       tree.insert(1);
       expect(tree.removeAt(tree.search(0)).data).to.equal(1);
+      expect(tree.root.data).to.equal(1);
     });
 
     it('should return left child when no right child', () => {
@@ -77,6 +78,7 @@ describe('BST', () => {
       const root = tree.insertAsRoot(1);
       tree.insert(0);
       expect(tree.removeAt(tree.search(1)).data).to.equal(0);
+      expect(tree.root.data).to.equal(0);
     });
 
     it('should return succ when have both right child and left child', () => {
@@ -84,7 +86,8 @@ describe('BST', () => {
       const root = tree.insertAsRoot(1);
       tree.insert(0);
       tree.insert(2);
-      expect(tree.removeAt(tree.search(0))).to.be.null;
+      expect(tree.removeAt(tree.search(1))).to.be.null;
+      expect(tree.root.data).to.equal(2);
     });
   });
 

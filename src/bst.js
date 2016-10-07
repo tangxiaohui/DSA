@@ -34,7 +34,6 @@ class BST extends BinTree {
     } else {
       x = this.hot.insertAsRC(e);
     }
-    this.size++;
     BinTree.updateHeightAbove(x);
     return x;
   }
@@ -55,13 +54,14 @@ class BST extends BinTree {
     let succ = null;
     if (!BinNode.hasLChild(x)) {
       succ = x.rc;
-      this.attachToParent(x, succ);
+      this.attachToParent(w, succ);
     } else if (!BinNode.hasRChild(x)) {
       succ = x.lc;
-      this.attachToParent(x, succ);
+      this.attachToParent(w, succ);
     } else { // 若左右子树均存在，则选择x的直接后继作为实际被摘除的节点
       w = w.succ();
       BST.swap(x, w);
+
       const u = w.parent;
       (u === x) ?
         u.rc = succ = w.rc :
