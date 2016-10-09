@@ -8,21 +8,21 @@ class ListNode {
   }
 
   insertAsPred(e) {
-    var x = new ListNode(e, this.pred, this);
+    const x = new ListNode(e, this.pred, this);
     this.pred.succ = x;
     this.pred = x;
     return x;
   }
 
   insertAsSucc(e) {
-    var x = new ListNode(e, this, this.succ);
+    const x = new ListNode(e, this, this.succ);
     this.succ.pred = x;
     this.succ = x;
     return x;
   }
-};
+}
 
-export default class List {
+class List {
   constructor(L = []) {
     this.init();
     if (L instanceof Array) {
@@ -32,14 +32,14 @@ export default class List {
 
   copy(array) {
     this.clear();
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
       this.insertAsLast(array[i]);
     }
   }
 
   toArray() {
-    var a = [];
-    this.traverse(function (x) {
+    const a = [];
+    this.traverse((x) => {
       a.push(x);
     });
     return a;
@@ -52,19 +52,19 @@ export default class List {
     this.header.pred = null;
     this.trailer.pred = this.header;
     this.trailer.succ = null;
-    this._size = 0;
+    this.size = 0;
   }
 
   clear() {
-    var oldSize = this._size;
-    while (0 < this._size) {
+    const oldSize = this.size;
+    while (0 < this.size) {
       this.remove(this.header.succ);
     }
     return oldSize;
   }
 
   _merge(p, n, q, m) {
-    var first = p; // 记录第一个节点
+    let first = p; // 记录第一个节点
     while (0 < m) {
       if ((0 < n) && (p.data <= q.data)) {
         if (q == (p = p.succ)) {
@@ -73,7 +73,7 @@ export default class List {
         n--;
       } else {
         q = q.succ;
-        var newInsert = this.insertB(p, this.remove(q.pred));
+        const newInsert = this.insertB(p, this.remove(q.pred));
         if (p === first) {
           first = newInsert;
         }
@@ -87,9 +87,9 @@ export default class List {
     if (n < 2) {
       return p; // 平凡情况，返回当前结点
     }
-    var m = n >> 1;
-    var q = p;
-    for (var i = 0; i < m; i++) {
+    const m = n >> 1;
+    let q = p;
+    for (let i = 0; i < m; i++) {
       q = q.succ;
     }
     p = this.mergeSort(p, m);
@@ -99,13 +99,13 @@ export default class List {
 
   // 在任何时刻，S[r, n)已经有序，且不小于前缀 S[0, r)
   selectionSort(p, n) {
-    var head = p.pred;
-    var tail = p;
-    for (var i = 0; i < n; i++) {
+    const head = p.pred;
+    let tail = p;
+    for (let i = 0; i < n; i++) {
       tail = tail.succ;
     }
     while (1 < n) {
-      var p = this._selectMax(head.succ, n);
+      const p = this._selectMax(head.succ, n);
       this.insertB(tail, this.remove(p));
       tail = tail.pred;
       n--;
@@ -113,23 +113,19 @@ export default class List {
   }
 
   insertionSort(p, n) {
-    for (var r = 0; r < n; r++) {
+    for (let r = 0; r < n; r++) {
       this.insertA(this._search(p.data, r, p), p.data);
       p = p.succ;
-      this.remove(p.pred); 
+      this.remove(p.pred);
     }
   }
 
-  size() {
-    return this._size;
-  }
-
   empty() {
-    return this._size <= 0;
+    return this.size <= 0;
   }
 
   get(r) {
-    var p = this.first();
+    let p = this.first();
     while (0 < r--) {
       p = p.succ;
     }
@@ -149,9 +145,9 @@ export default class List {
   }
 
   disordered() {
-    var p = this.header;
-    var n = 0;
-    for (var cur = p.succ; cur !== this.last(); cur = cur.succ) {
+    const p = this.header;
+    let n = 0;
+    for (let cur = p.succ; cur !== this.last(); cur = cur.succ) {
       if (cur.succ.data < cur.data) {
         n++;
       }
@@ -160,7 +156,7 @@ export default class List {
   }
 
   find(e) {
-    return this._find(e, this._size, this.trailer);
+    return this._find(e, this.size, this.trailer);
   }
 
   // 在无序列表的n个真前缀中，找到等于e的最后者
@@ -175,7 +171,7 @@ export default class List {
 
 
   search(e) {
-    return this._search(e, this._size, this.trailer);
+    return this._search(e, this.size, this.trailer);
   }
 
   // 在有序列表内节点 p 的 n 个真前驱中，找到不大于e的最后者
@@ -189,8 +185,8 @@ export default class List {
   }
 
   _selectMax(p, n) {
-    var max = p;
-    for (var cur = p; 1 < n; n--) {
+    let max = p;
+    for (let cur = p; 1 < n; n--) {
       if ((cur = cur.succ).data > max.data) {
         max = cur;
       }
@@ -199,34 +195,34 @@ export default class List {
   }
 
   selectMax() {
-    return this._selectMax(this.header.succ, this._size);
+    return this._selectMax(this.header.succ, this.size);
   }
 
   insertAsFirst(e) {
-    this._size++;
+    this.size++;
     return this.header.insertAsSucc(e);
   }
 
   insertAsLast(e) {
-    this._size++;
+    this.size++;
     return this.trailer.insertAsPred(e);
   }
 
   // e 作为 p 的后缀插入
   insertA(p, e) {
-    this._size++;
+    this.size++;
     return p.insertAsSucc(e);
   }
 
   // e 作为 p 的前缀插入
   insertB(p, e) {
-    this._size++;
+    this.size++;
     return p.insertAsPred(e);
   }
 
   remove(p) {
-    var e = p.data;
-    this._size--;
+    const e = p.data;
+    this.size--;
     p.succ.pred = p.pred;
     p.pred.succ = p.succ;
     return e;
@@ -241,30 +237,30 @@ export default class List {
   }
 
   sort() {
-    this._sort(this.first(), this._size());
+    this._sort(this.first(), this.size());
   }
 
   deduplicate() {
-    if (this._size < 2) {
+    if (this.size < 2) {
       return 0;
     }
-    var oldSize = this._size;
-    var p = this.header;
-    var r = 0;
+    const oldSize = this.size;
+    let p = this.header;
+    let r = 0;
     while (this.trailer !== (p = p.succ)) {
-      var q = this._find(p.data, r, p);
+      const q = this._find(p.data, r, p);
       q ? this.remove(q) : r++;
     }
-    return oldSize - this._size;
+    return oldSize - this.size;
   }
 
   uniquify() {
-    if (this._size < 2) {
+    if (this.size < 2) {
       return 0;
     }
-    var oldSize = this._size;
-    var p = this.first();
-    var q;
+    const oldSize = this.size;
+    let p = this.first();
+    let q;
     while (this.trailer !== (q = p.succ)) {
       if (q.data !== p.data) {
         p = q;
@@ -272,43 +268,48 @@ export default class List {
         this.remove(q);
       }
     }
-    return oldSize - this._size;
+    return oldSize - this.size;
   }
 
   swapData(p, q) {
-    var temp = p.data;
+    const temp = p.data;
     p.data = q.data;
     q.data = temp;
   }
 
   reverse() {
-    var p = this.header;
-    var q = this.trailer;
-    for (var i = 0; i < this._size; i += 2) {
+    let p = this.header;
+    let q = this.trailer;
+    for (let i = 0; i < this.size; i += 2) {
       this.swapData((p = p.succ), (q = q.pred));
     }
   }
 
   swapPredSucc(p) {
-    var tp = p.pred;
+    const tp = p.pred;
     p.pred = p.succ;
     p.succ = tp;
   }
 
   reverse2() {
-    for (var p = this.header; p; p = p.pred) {
+    for (let p = this.header; p; p = p.pred) {
       this.swapPredSucc(p);
     }
-    var temp = this.header;
+    const temp = this.header;
     this.header = this.trailer;
     this.trailer = temp;
   }
 
   traverse(visit, p) {
-    var cur = p || this.first();
+    let cur = p || this.first();
     while (cur !== this.trailer) {
       visit(cur.data);
       cur = cur.succ;
-    } 
+    }
   }
+}
+
+export {
+  List,
+  ListNode,
 };
