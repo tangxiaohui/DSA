@@ -1,5 +1,5 @@
 
-import List from './list';
+import { List } from './list';
 
 export default class Queue extends List {
   constructor(L = []) {
