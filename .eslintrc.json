@@ -23,6 +23,7 @@
         "no-param-reassign": "off",
         "no-plusplus": "off",
         "no-unused-expressions": "off",
+        "no-bitwise": ["error", {"allow": ["<<", ">>", "|"]}],
         "linebreak-style": ["error", "windows"]
     },
      "extends": "airbnb-base"
