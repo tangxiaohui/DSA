@@ -1,9 +1,9 @@
 import { Entry } from './skiplist';
-import { Vector } from ''
+import Vector from './vector';
 
 class BitMap {
   constructor(n) {
-    this.values = Array.from({ length: n }, v => false);
+    this.values = Array.from({ length: n }, () => false);
   }
 
   test(n) {
@@ -17,14 +17,18 @@ class BitMap {
 
 class HashTable {
   constructor(c = 5) {
-    this.M = this.getPrime(c, 1048576);
+    this.M = HashTable.getPrime(c, 1000);
     this.N = 0;
-    this.ht = [];
+    this.ht = Array.from({ length: this.M }, () => null);
     this.lazyRemoval = new BitMap(this.M);
   }
 
   size() {
     return this.N;
+  }
+
+  capacity() {
+    return this.M;
   }
 
   put(k, v) {
@@ -41,7 +45,7 @@ class HashTable {
   }
 
   probe4Free(k) {
-    let r = this.hashCode(k) % this.M;
+    let r = HashTable.hashCode(k) % this.M;
     while (this.ht[r]) {
       r = (r + 1) % this.M;
     }
@@ -54,7 +58,8 @@ class HashTable {
   }
 
   probe4Hit(k) {
-    let r = this.hashCode(k) % this.M;
+    let r = HashTable.hashCode(k) % this.M;
+    // linear chain probe, break if k = key (success) or null but not mark as removed (fail)
     while ((this.ht[r] && (k !== this.ht[r].key)) || (!this.ht[r] && this.lazilyRemoved(r))) {
       r = (r + 1) % this.M;
     }
@@ -73,7 +78,7 @@ class HashTable {
   }
 
   lazilyRemoved(x) {
-    this.lazyRemoval.test(x);
+    return this.lazyRemoval.test(x);
   }
 
   markAsRemoved(x) {
@@ -84,7 +89,7 @@ class HashTable {
     const oldCapacity = this.M;
     this.M = oldCapacity * 2;
     this.N = 0;
-    this.lazyRemoval = new BitMap(M);
+    this.lazyRemoval = new BitMap(this.M);
     const oldHt = this.ht.slice();
     this.ht = [];
     for (let i = 0; i < oldCapacity; i++) {
@@ -94,12 +99,15 @@ class HashTable {
     }
   }
 
+  indexOf(r) {
+    return this.ht[r];
+  }
+
   static hashCode(c) {
-    if (c instanceof String) {
-      let h;
+    if (typeof c === 'string') {
+      let h = 0;
       for (let n = c.length, i = 0; i < n; i++) {
-        h = (h << 5) | (h >> 27);
-        h += c[i];
+        h += c.charCodeAt(i) * Math.pow(33, n - 1 - i);
       }
       return h;
     }
@@ -109,47 +117,59 @@ class HashTable {
   static getPrime(lo, hi) {
     const sivies = [];
     const primes = [];
-    for (let i = lo; i < hi; i++) {
+    for (let i = 2; i <= hi; i++) {
       if (!sivies[i]) {
         primes.push(i);
-        for (let j = i * 2; j < hi; j += i) {
+        for (let j = i * 2; j <= hi; j += i) {
           sivies[j] = true;
         }
       }
     }
-    const rank = Math.floor(Math.random() * (hi - lo)) + lo;
-    return primes[rank];
+    return primes[Math.floor(Math.random() * primes.length)];
   }
 
-  static bucketSort(array, bucketSize = 5) {
-    const arr = new Vector(array);
-    let min = arr.get(0);
-    let max = arr.get(0);
-
-    for (let i = 1; i < arr.size(); i++) {
-      if (min > arr.get(i)) {
-        min = arr.get(i);
-      } else if (max < arr.get(i)) {
-        max = arr.get(i);
+  static isPrime(n) {
+    for (let i = 2; i < n; i++) {
+      if (i % n === 0) {
+        return false;
       }
     }
+    return true;
+  }
+
+  static bucketSort(array, bucketSize = 1) {
+    const min = array.reduce((pred, curr) => (pred > curr ? curr : pred));
+    const max = array.reduce((pred, curr) => (pred < curr ? curr : pred));
 
     const hash = x => Math.floor(x - min) / bucketSize;
     const bucketCount = Math.floor((max - min) / bucketSize) + 1;
     const buckets = new Array(bucketCount);
 
     for (let i = 0; i < bucketCount; i++) {
-      buckets[i] = new Vector();
+      buckets[i] = [];
     }
 
-    for (let i = 0; i < arr.size(); i++) {
-      buckets[hash(arr.get(i))].push(arr.get(i));
+    for (let i = 0; i < array.length; i++) {
+      const bucketIndex = hash(array[i]);
+      buckets[bucketIndex].push(array[i]);
     }
 
     return buckets.reduce((output, bucket) => {
-      bucket.insertionSort(0, bucket.size());
-      return output.concat(bucket.raw());
+      HashTable.insertionSort(bucket);
+      return output.concat(bucket);
     }, []);
+  }
+
+  static insertionSort(array) {
+    for (let i = 1; i < array.length; i++) {
+      const temp = array[i - 1];
+      let j = i;
+      while (j > 0 && array[j] > temp) {
+        array[j] = array[j - 1];
+        j--;
+      }
+      array[j] = temp;
+    }
   }
 
   static maxGap(array) {
@@ -159,9 +179,10 @@ class HashTable {
   static countSortBySignificantDigit(array, exponent, radix, min) {
     const buckets = Array(radix).fill(0);
     const output = [];
+    const hash = x => Math.floor(((x - min) / exponent) % radix);
 
     for (let i = 0; i < array.length; i++) {
-      const bucketIndex = Math.floor(((array[i] - min) / exponent) % radix);
+      const bucketIndex = hash(array[i]);
       buckets[bucketIndex]++;
     }
 
@@ -170,7 +191,7 @@ class HashTable {
     }
 
     for (let i = array.length - 1; i >= 0; i--) {
-      const bucketIndex = Math.floor(((array[i] - min) / exponent) % radix);
+      const bucketIndex = hash(array[i]);
       output[--buckets[bucketIndex]] = array[i];
     }
 
@@ -188,6 +209,7 @@ class HashTable {
     }
     return array;
   }
+
 }
 
 export {
