@@ -4,7 +4,7 @@
   "description": "Implement data structures and algorithms by Javascript",
   "main": "index.js",
   "scripts": {
-    "test": "mocha  --compilers js:babel-core/register test/test_stack.js"
+    "test": "mocha  --compilers js:babel-core/register test/test_skiplist.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "eslint": "^3.6.0",
     "eslint-config-airbnb-base": "^8.0.0",
     "eslint-plugin-import": "^1.16.0",
-    "mocha": "^3.0.2"
+    "mocha": "^3.0.2",
+    "sinon": "^1.17.6"
   }
 }
