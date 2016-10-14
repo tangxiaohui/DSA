@@ -111,6 +111,14 @@ class CompleteHeap extends PriortyQueue {
     }
     return i;
   }
+
+  static heapSort(a) {
+    const heap = new CompleteHeap(a);
+    let i = a.length;
+    while (!heap.empty()) {
+      a[--i] = heap.delMax();
+    }
+  }
 }
 
 export {

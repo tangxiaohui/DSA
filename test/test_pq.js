@@ -136,6 +136,14 @@ describe('Priority Queue', () => {
         testProperParent([3, 2, 1], 0);
       });
     });
+
+    describe('heapSort', () => {
+      it('should be sorted after sort', () => {
+        const array = [34, 22, 19];
+        CompleteHeap.heapSort(array);
+        expect(array).to.eql([19, 22, 34]);
+      });
+    });
   });
 });
 
