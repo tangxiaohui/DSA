@@ -36,15 +36,9 @@ describe('Vector', () => {
 
   describe('mergeSort', () => {
     it('should become sorted', () => {
-      const vectorA = new Vector([9, 8, 3, 0]);
-      const vectorB = new Vector([8, 1, 0]);
-      const vectorC = new Vector([0]);
-      vectorA.mergeSort(0, vectorA.size());
-      vectorB.mergeSort(0, vectorB.size());
-      vectorC.mergeSort(0, vectorC.size());
-      expect(vectorA.disordered()).to.equal(0);
-      expect(vectorB.disordered()).to.equal(0);
-      expect(vectorC.disordered()).to.equal(0);
+      const vector = new Vector([9, 8, 3, 0]);
+      vector.mergeSort(0, vector.size());
+      expect(vector.disordered()).to.equal(0);
     });
   });
 

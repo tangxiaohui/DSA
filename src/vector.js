@@ -1,6 +1,6 @@
 import { rand } from './util';
 
-export default class Vector {
+class Vector {
   constructor(array = []) {
     if (array instanceof Vector) {
       this.elems = Array.from(array.elems);
@@ -13,6 +13,16 @@ export default class Vector {
     const temp = this.elems[a];
     this.elems[a] = this.elems[b];
     this.elems[b] = temp;
+  }
+
+  max(lo, hi) {
+    let max = lo;
+    for (let i = lo; i < hi; i++) {
+      if (this.elems[max] < this.elems[i]) {
+        max = i;
+      }
+    }
+    return max;
   }
 
   bubble(lo, hi) {
@@ -28,16 +38,6 @@ export default class Vector {
 
   bubbleSort(lo, hi) {
     while (!this.bubble(lo, hi--));
-  }
-
-  max(lo, hi) {
-    let max = lo;
-    for (let i = lo; i < hi; i++) {
-      if (this.elems[max] < this.elems[i]) {
-        max = i;
-      }
-    }
-    return max;
   }
 
   selectionSort(lo, hi) {
@@ -84,10 +84,6 @@ export default class Vector {
   }
 
   quickSort(lo, hi) {
-
-  }
-
-  heapSort(lo, hi) {
 
   }
 
@@ -234,4 +230,5 @@ export default class Vector {
   }
 }
 
-module.exports = Vector;
+export default Vector;
+
