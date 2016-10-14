@@ -1,9 +1,5 @@
-import {
-  List
-} from './list';
-import {
-  rand
-} from './util';
+import { List } from './list';
+import { rand } from './util';
 
 class Entry {
   constructor(key, value) {
