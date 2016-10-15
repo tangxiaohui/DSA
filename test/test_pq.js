@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { CompleteHeap } from '../src/priority_queue';
+import { BinNode } from '../src/binary_tree';
+import { LeftHeap, CompleteHeap } from '../src/priority_queue';
 
 describe('Priority Queue', () => {
   describe('CompleteHeap', () => {
@@ -142,6 +143,44 @@ describe('Priority Queue', () => {
         const array = [34, 22, 19];
         CompleteHeap.heapSort(array);
         expect(array).to.eql([19, 22, 34]);
+      });
+    });
+  });
+
+  describe('LeftHeap', () => {
+    describe('insert', () => {
+      it('should keep max in the top', () => {
+        const leftHeap = new LeftHeap();
+        leftHeap.insert(1);
+        leftHeap.insert(2);
+        leftHeap.insert(3);
+        expect(leftHeap.getMax()).to.equal(3);
+      });
+    });
+
+    describe('delMax', () => {
+      it('should return the max', () => {
+        const leftHeap = new LeftHeap([1, 2, 3]);
+        expect(leftHeap.delMax()).to.equal(3);
+      });
+    });
+
+    describe('merge', () => {
+      it('should merge two leftHeap', () => {
+        const heap1 = new LeftHeap([1, 2, 3]);
+        const heap2 = new LeftHeap([4, 5, 6, 7]);
+        while (!heap1.empty()) {
+          heap2.insert(new BinNode(heap1.delMax()));
+        }
+        expect(heap2.size).to.equal(7);
+        expect(heap2.getMax()).to.equal(7);
+      });
+    });
+
+    describe('getMax', () => {
+      it('should return max element', () => {
+        const leftHeap = new LeftHeap([1, 2, 3]);
+        expect(leftHeap.getMax()).to.equal(3);
       });
     });
   });
