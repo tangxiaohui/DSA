@@ -42,6 +42,51 @@ describe('Vector', () => {
     });
   });
 
+  describe('quickSort', () => {
+    it('should become sorted', () => {
+      const vector = new Vector([3, 5, 1, 0, 8]);
+      vector.quickSort(0, vector.size());
+      expect(vector.disordered()).to.equal(0);
+    });
+  });
+
+  describe('shellSort', () => {
+    it('should become sorted', () => {
+      const vector = new Vector([3, 5, 1, 0, 8]);
+      vector.shellSort();
+      expect(vector.disordered()).to.equal(0);
+    });
+  });
+
+  describe('majority', () => {
+    it('should return true if have majority', () => {
+      const vector = new Vector([1, 3, 2, 2, 2]);
+      expect(vector.majorityCandicate()).to.equal(2);
+      expect(vector.majority()).to.be.true;
+    });
+
+    it('should return false if have not majority', () => {
+      const vector = new Vector([1, 2, 3]);
+      expect(vector.majority()).to.be.false;
+    });
+  });
+
+  describe('median', () => {
+    it('should return median of two same size vector', () => {
+      const s1 = new Vector([2, 3, 1, 1]);
+      const s2 = new Vector([1, 1, 2, 3]);
+      expect(Vector.median(s1, 0, s2, 0, 4)).to.equal(1);
+    });
+  });
+
+  describe('quickSelect', () => {
+    it('should let k element to be same as ordered', () => {
+      const vector = new Vector([3, 5, 8, 1]);
+      vector.quickSelect(2);
+      expect(vector.get(2)).to.equal(5);
+    });
+  });
+
   describe('empty', () => {
     it('should get true when empty', () => {
       const vector = new Vector([]);
